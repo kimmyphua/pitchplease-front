@@ -17,8 +17,7 @@ function Navigation({setAuth, setUser, user}) {
             let {data} = await axios.get(`/api/user/${user._id}`);
             console.log(data.user.messages)
             setMyMsg(data.user.messages.reverse())
-            // alert('Pitch Edited!');
-            // console.log(message)
+
         }catch (e) {
             console.log(e.response)
         }
@@ -75,7 +74,6 @@ function Navigation({setAuth, setUser, user}) {
                     ))}
 
                 </div>
-                {/*<button className="btn bg-transparent text-dark" onClick={handleShowEdit}> Comment </button>*/}
 
             </Modal>
         </Navbar>

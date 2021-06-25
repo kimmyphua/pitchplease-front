@@ -4,18 +4,15 @@ import axios from "axios";
 import {Container, Form, Row, Col, Modal} from "react-bootstrap";
 import PitchItem from "./PitchItem";
 import styles from "./Dashboard.module.css"
-import Reply from "./Reply";
+
 
 
 const Dashboard = () => {
     const [user, setUser] = useState({})
     const [pitch, setPitch] = useState([])
     const [post, setPost] = useState({})
+
     const form = useRef(null)
-    // const [myMsg, setMyMsg] = useState([])
-    // const [show, setShow] = useState(false);
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
 
     useEffect(() => {
         async function setUserStats() {
@@ -26,7 +23,6 @@ const Dashboard = () => {
                     }
                 })
                 setUser(data.user)
-                // console.log(user._id)
 
             } catch (e) {
                 setUser({})
@@ -71,7 +67,11 @@ const Dashboard = () => {
         } catch (e) {
             console.log(e)
         }
+
         getPitch()
+        form.current.reset()
+
+
     }
 
 
@@ -80,19 +80,6 @@ const Dashboard = () => {
         console.log(post)
     }
 
-
-    // async function getMessage() {
-    //     try{
-    //         let {data} = await axios.get(`/api/user/${user._id}`);
-    //         console.log(data.user.messages)
-    //         setMyMsg(data.user.messages)
-    //         // alert('Pitch Edited!');
-    //         // console.log(message)
-    //     }catch (e) {
-    //         console.log(e.response)
-    //     }
-    //     handleShow()
-    // }
 
 
 
@@ -112,7 +99,8 @@ if(user.role === "recruiter"){
                         <Row className="justify-content-center mx-2">
                             <label>Title * </label>
 
-                            <textarea onChange={change}
+                            <textarea
+                                    onChange={change}
                                    type="text"
                                    name="title"
                                    rows = "2"

@@ -4,8 +4,7 @@ import PitchItemRec from "./PitchItemRec";
 import {Col, Row, Container, Modal} from "react-bootstrap";
 import FavouritePitches from "./FavouritePitches";
 import styles from "./Dashboard.module.css"
-import Message from "./Message";
-import Reply from "./Reply";
+
 
 function DashboardRec() {
     const [user, setUser] = useState({})
@@ -70,7 +69,7 @@ function DashboardRec() {
 
             <Row>
                 <Col md={9} className={`${styles.makeThisScroll} border border-2 border-dark`}>
-                    <div style={{width: "100%",
+                    <div style={{
                                   marginBottom: "20px",
                                   position: 'fixed',
                                   zIndex: "100",
@@ -116,7 +115,7 @@ function DashboardRec() {
                         display: "grid",
                         gridTemplateColumns: "repeat(1, auto)",
                         gridGap: "1px",
-                        marginTop: "70px",
+                        marginTop: "20px",
 
                     }}>
                         {showFav.filter(item => {
@@ -127,7 +126,9 @@ function DashboardRec() {
                                 return item
                             }
                         }).map((item, i) => (
-                            <FavouritePitches item={item} user={user} setShowFav={setShowFav}
+                            <FavouritePitches item={item}
+                                              user={user}
+                                              setShowFav={setShowFav}
                                               key={i}/>
                         ))}
                     </div>

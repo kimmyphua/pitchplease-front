@@ -3,7 +3,6 @@ import {Col, Row, Form, Modal} from "react-bootstrap";
 import styles from "./PitchItem.module.css"
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import axios from "axios";
-import {BrowserRouter, Redirect, Route, Switch, NavLink} from "react-router-dom";
 import Message from "./Message";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 
@@ -16,19 +15,26 @@ function FavouritePitches({item, user, setShowFav}) {
     const handleCloseEdit = () => setShowEdit(false);
     const handleShowEdit = () => setShowEdit(true);
     const [post, setPost] = useState({name: user.name, text: ""})
+    const [pitch, setPitch] = useState([])
 
 
+    async function getPitch() {
+        console.log('YOUR FATHAR')
+        let {data} = await axios.get(`/api/pitch`)
+        setPitch(data.pitches.reverse())
+
+    }
 
     async function getFavourites() {
         console.log('YOUR MATHER')
         let {data} = await axios.get(`/api/user/${user._id}`)
-        // console.log("data",data)
-        // console.log("fav", data.user.favourites)
+
         if (data.user.favourites) {
             setShowFav(data.user.favourites.reverse())
         } else {
             setShowFav(null)
         }
+        getPitch()
     }
 
     async function removeFav(e) {
@@ -42,7 +48,6 @@ function FavouritePitches({item, user, setShowFav}) {
                     }
                 })
                 console.log(res.data)
-
             } catch (e) {
                 console.log(e)
             }
@@ -57,6 +62,9 @@ function FavouritePitches({item, user, setShowFav}) {
         await axios.put(`/api/pitch/editcomment/${item._id}`, post);
         alert('Commented!');
         setShowEdit(false)
+        getPitch()
+            getFavourites()
+
         }catch (e) {
             console.log(e.response)
         }
@@ -72,8 +80,6 @@ function FavouritePitches({item, user, setShowFav}) {
 
     return (
         <div>
-
-
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
@@ -100,7 +106,7 @@ function FavouritePitches({item, user, setShowFav}) {
             <Modal show={showEdit} onHide={handleCloseEdit}>
                 <Form ref={form} id="form" onSubmit={postComment} method="post">
                     <Row className="justify-content-center mx-2">
-                        <label>Title * </label>
+                        <label>Send your love * </label>
 
                         <input onChange={change}
                                type="text"
@@ -123,8 +129,6 @@ function FavouritePitches({item, user, setShowFav}) {
 
             <ul>
                 <li style={{background: `${item.color}`}}>
-
-
                     <h4 className="font-monospace"> {item.title}</h4>
                     <span>Self Intro: {item.selfintro}</span>
                     <span>USP: {item.usp}</span>
@@ -150,10 +154,7 @@ function FavouritePitches({item, user, setShowFav}) {
                         </Col>
                         <Col md={4}>
                             <button className="btn bg-transparent text-dark" onClick={handleShow}> <VisibilityIcon/> </button>
-
-
                         </Col>
-
 
                     </Row>
 

@@ -8,7 +8,7 @@ import {Form} from "react-bootstrap";
 
 function Login({auth, setAuth}) {
 
-    // const onSubmit = data => console.log(data);
+
     const [data, setData] = useState({})
     const form = useRef(null)
 

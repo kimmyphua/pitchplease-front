@@ -7,17 +7,13 @@ import Single from "./Single";
 import EmailIcon from '@material-ui/icons/Email';
 
 function Message({user, item}) {
-    const [message, setMessage] = useState({sender: user._id, title: item.title, pitchId: item._id, name: user.name, text: "", time: Date.now()})
+    const [message, setMessage] = useState({})
     const form = useRef(null)
     const [myMsg, setMyMsg] = useState([])
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    // const [showMessage, setShowMessage] = useState(false);
-    // const handleCloseMessage = () => setShowMessage(false);
-    // const handleShowMessage = () => setShowMessage(true);
-    // const [message, setMessage] = useState({name: user.name, text: ""})
-
+    const [showFav, setShowFav] = useState([])
 
     async function postMessage(e) {
         e.preventDefault()
@@ -29,10 +25,18 @@ function Message({user, item}) {
             console.log("msg", message)
             alert('Message Sent! :D');
             handleClose()
+            getFavourites()
         }catch (e) {
             console.log(e.response)
         }
     }
+
+    function settingMsg() {
+        setMessage({sender: user._id, title: item.title, pitchId: item._id, name: user.name, text: "", time: Date.now()})
+    }
+
+
+
 
     function changeMessage(e) {
         setMessage(prevState => ({...prevState, [e.target.name]: e.target.value}))
@@ -41,24 +45,30 @@ function Message({user, item}) {
     }
 
     async function getMessage() {
-
+        settingMsg()
         try{
             let {data} = await axios.get(`/api/user/${user._id}`);
             console.log(data.user.messages)
             setMyMsg(data.user.messages.reverse())
-            // setMyMsg(data.messages)
-            // alert('Pitch Edited!');
-            // console.log(message)
+
         }catch (e) {
             console.log(e.response)
         }
         handleShow()
+        getFavourites()
     }
 
-
-
-// console.log(item)
-
+    async function getFavourites() {
+        console.log('YOUR MATHER')
+        let {data} = await axios.get(`/api/user/${user._id}`)
+        // console.log("data",data)
+        // console.log("fav", data.user.favourites)
+        if (data.user.favourites) {
+            setShowFav(data.user.favourites.reverse())
+        } else {
+            setShowFav(null)
+        }
+    }
 
     return (
         <div className="App">
@@ -73,7 +83,7 @@ function Message({user, item}) {
                     <img style={{width:"20%"}} className="navButton" src="https://i.pinimg.com/originals/c4/cd/cc/c4cdccefc24e88ba6f4f1bbaeb817c2c.png" />
 
 
-                        <Row className="justify-content-center mx-2">
+                        <Row className="justify-content-center mx-2 text-dark">
 
                             <label>Type Your Message Here * </label>
 
@@ -96,22 +106,11 @@ function Message({user, item}) {
                     </Form>
 
 
-                            {/*<h3 className="text-center font-monospace border-top border-2 border-dark">messages:</h3>*/}
-                            {/*<div className={`border border-dark border-2`}>*/}
-                            {/*    */}
-                            {/*    {myMsg.map(msg => (*/}
-                            {/*        <div className="border-bottom py-5 border-dark">*/}
-                            {/*            <Reply msg={msg} user={user} />*/}
-                            {/*        </div>*/}
-                            {/*    ))}*/}
-                            {/*  */}
-
-                            {/*</div>*/}
 
                         </Row>
 
                 </div>
-                    {/*<button className="btn bg-transparent text-dark" onClick={handleShowEdit}> Comment </button>*/}
+
 
             </Modal>
 

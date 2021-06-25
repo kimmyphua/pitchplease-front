@@ -9,10 +9,9 @@ import Dashboard from "./Components/Display/Dashboard"
 import DashboardRec from "./Components/Display/DashboardRec";
 import NotFound from "./Components/auth/NotFound";
 import Navigation from "./Components/Navigation";
-import {Container} from "react-bootstrap";
 import Home from "./Components/Display/Home";
 import About from "./Components/Display/About";
-import Message from "./Components/Display/Message";
+
 
 function App() {
     const [auth, setAuth] = useState({})
@@ -67,15 +66,10 @@ function App() {
                 <Route path="/register" exact>
                     <Register auth={auth} setAuth={setAuth}/>
                 </Route>
-                    {/*<Route path="/singlepitch">*/}
-                    {/*    <Single user={user} />*/}
-                    {/*</Route>*/}
+
                 <PrivateRouter auth={auth} user={user} path="/dashboard" exact Component={Dashboard} />
                 <PrivateRouter auth={auth} user={user} path="/recruiter" exact Component={DashboardRec} />
 
-                {/*<Route path="/dashboard" exact>*/}
-                {/*    <Dashboard auth={auth} user={user} logout={logout}/>*/}
-                {/*</Route>*/}
 
                 <Route path="*">
                     <NotFound />

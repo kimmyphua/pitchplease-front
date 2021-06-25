@@ -7,7 +7,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 
 function PitchItemRec({item, setPitch, user, setShowFav}) {
-    // const [user, setUser] = useState({})
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -24,14 +24,13 @@ function PitchItemRec({item, setPitch, user, setShowFav}) {
     async function getFavourites() {
         console.log('YOUR MATHER')
         let {data} = await axios.get(`/api/user/${user._id}`)
-        // console.log("data",data)
-        // console.log("fav", data.user.favourites)
         if (data.user.favourites) {
             setShowFav(data.user.favourites.reverse())
         } else {
             setShowFav(null)
         }
     }
+
     async function submitFav(e) {
         e.preventDefault(e)
         console.log("item id", item._id)
@@ -147,7 +146,8 @@ function PitchItemRec({item, setPitch, user, setShowFav}) {
                                 <Col md={4}>
 
                                     <Form ref={form} id="form" onSubmit={submitFav} method="post">
-                                    <button type="submit" className="btn bg-transparent"><img src="https://img.icons8.com/offices/30/000000/filled-like.png"/> </button>
+                                    <button type="submit" className="btn bg-transparent">
+                                        <img src="https://img.icons8.com/offices/30/000000/filled-like.png"/> </button>
                                     </Form>
                                 </Col>
 

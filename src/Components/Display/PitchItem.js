@@ -1,7 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {Container, Card, Col, Row, Modal, Form} from "react-bootstrap";
 import axios from "axios"
-import styles from "./PitchItem.module.css"
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';

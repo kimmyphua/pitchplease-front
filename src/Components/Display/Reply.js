@@ -24,15 +24,10 @@ function Reply({msg, user}) {
     function changeMessage(e) {
         setMessage(prevState => ({...prevState, [e.target.name]: e.target.value}))
         console.log(message)
-        // console.log("item", item)
+
     }
 
-    // function timeStr(){
-    //     let time = {msg.time}
-    //     return (
-    //     new Date(parseInt(time,10)).toLocaleTimeString()
-    //     )
-    // }
+
 
     return (
         <div>
@@ -62,8 +57,7 @@ function Reply({msg, user}) {
                         <h5>Send!</h5>
                     </button>
                     </Row>
-                    {/*My Messages:*/}
-                    {/*<button onClick={getMessage}> Load Messages</button>*/}
+
                 </Row>
             </Form>
 
