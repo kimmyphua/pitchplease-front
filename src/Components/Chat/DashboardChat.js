@@ -13,6 +13,7 @@ const pusher = new Pusher('aaca110194e03e7b0484', {
 function DashboardChat(auth) {
     let userID = (auth.user._id)
     const [user, setUser] = useState({})
+    const [chatID, setChatID] = useState("")
     console.log(auth)
     console.log(userID)
     const [chat, setChat] = useState([])
@@ -38,28 +39,28 @@ function DashboardChat(auth) {
             setUserStats()
         }, [])
 
-    const addChat = (e) => {
-            e.preventDefault()
-
-            const chatName = prompt('Please enter a chat name')
-            const firstMsg = prompt('Please enter a welcome message')
-
-            if (chatName && firstMsg) {
-                let chatId = ''
-
-                axios.post('/api/chat/new/conversation', {
-                    chatName: chatName
-                }).then((res) => {
-                    chatId = res.data._id
-                }).then(() => {
-                    axios.post(`/api/chat/new/message?id=${chatId}`, {
-                        message: firstMsg,
-                        timestamp: Date.now(),
-                        user: user
-                    })
-                })
-            }
-        }
+    // const addChat = (e) => {
+    //         e.preventDefault()
+    //
+    //         const chatName = prompt('Please enter a chat name')
+    //         const firstMsg = prompt('Please enter a welcome message')
+    //
+    //         if (chatName && firstMsg) {
+    //             let chatId = ''
+    //
+    //             axios.post('/api/chat/new/conversation', {
+    //                 chatName: chatName
+    //             }).then((res) => {
+    //                 chatId = res.data._id
+    //             }).then(() => {
+    //                 axios.post(`/api/chat/new/message?id=${chatId}`, {
+    //                     message: firstMsg,
+    //                     timestamp: Date.now(),
+    //                     user: user
+    //                 })
+    //             })
+    //         }
+    //     }
 
     return (
             <div className="DashboardChat">
@@ -77,9 +78,8 @@ function DashboardChat(auth) {
                 {/*        <div>{item.message}</div>*/}
                 {/*    ))*/}
                 {/*}*/}
-                <button onClick={addChat}>Add Chat</button>
-                <Sidebar auth={auth} user={user}/>
-                <Chat auth={auth} user={user}/>
+                <Sidebar auth={auth} user={user} setChat={setChat} chat={chat}/>
+                <Chat auth={auth} user={user} setChat={setChat} chat={chat}/>
             </div>
     );
 }

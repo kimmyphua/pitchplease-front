@@ -9,20 +9,24 @@ const pusher = new Pusher('aaca110194e03e7b0484', {
     cluster: 'ap1'
 });
 
-function SidebarChat({ id, chatName }) {
+function SidebarChat({ id, chatName, auth , chat, setChat}) {
     const [chatInfo, setChatInfo] = useState([]);
+
     const [lastMsg, setLastMsg] = useState([]);
-    const [lastPhoto, setLastPhoto] = useState();
+    // const [lastPhoto, setLastPhoto] = useState();
     const [lastTimestamp, setLastTimestamp] = useState([]);
 
     const getSidebarElement = () => {
         axios.get(`/api/chat/get/lastMessage/?id=${id}`)
             .then((res) => {
                 setLastMsg(res.data.message)
-                setLastPhoto(res.data.user.photo)
+                // setLastPhoto(res.data.user.photo)
                 setLastTimestamp(res.data.timestamp)
             })
     }
+
+    console.log(chat)
+
 
     useEffect(() => {
         getSidebarElement()
@@ -35,23 +39,13 @@ function SidebarChat({ id, chatName }) {
     }, [id]);
 
     return (
-        <div
-            // onClick={() =>
-            //     dispatch(
-            //         setChat({
-            //             chatId: id,
-            //             chatName: chatName,
-            //         })
-            //     )
-            // }
-            // className="sidebarChat"
-        >
+        <div onClick={() => setChat({chatId: id, chatName: chatName})} className="sidebarChat">
             {/*<Avatar src={lastPhoto} />*/}
             <div className="sidebarChat__info">
                 <h3>{chatName}</h3>
                 <p>{lastMsg}</p>
                 <small>
-                    {new Date(parseInt(lastTimestamp,10)).toUTCString()}
+                    {new Date(parseInt(lastTimestamp,10)).toLocaleTimeString()}
                 </small>
             </div>
         </div>

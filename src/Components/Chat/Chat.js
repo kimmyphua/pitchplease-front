@@ -6,25 +6,30 @@ import Message from "./Message";
 import FlipMove from "react-flip-move";
 import axios from 'axios';
 import Pusher from "pusher-js";
+import Sidebar from "./Sidebar";
 
 const pusher = new Pusher('aaca110194e03e7b0484', {
     cluster: 'ap1'
 });
 
-function Chat({user, chatId, chatName}) {
+function Chat({chatId, chatName, auth, setChat, chat}) {
+
+    chatId = (chat.chatId)
+    console.log(chat.chatName)
+    console.log(auth)
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState([]);
 
+    const getConversation = (chatId) => {
+        if (chatId) {
+            axios.get(`/api/chat/get/conversation?id=${chatId}`)
+                .then((res) => {
+                    setMessages(res.data[0].conversation)
 
-
-
-    function getConversation() {
-        axios.get(`/api/chat/get/conversation?id=60d49d46b84852b62dddc556`)
-            .then((res) => {
-                setMessages(res.data[0].conversation)
-            })
-        console.log('messages',messages)
+                })
+            console.log('messages',messages)
         }
+    }
 
     useEffect(() => {
         pusher.unsubscribe('messages')
@@ -36,18 +41,20 @@ function Chat({user, chatId, chatName}) {
         });
     }, [chatId]);
 
+
     const sendMessage = (e) => {
         e.preventDefault();
 
-        axios.post(`/api/new/message?id=${chatId}`, {
+        console.log(auth)
+
+        axios.post(`/api/chat/new/message?id=${chatId}`, {
             message: input,
             timestamp: Date.now(),
-            user: user
+            user: auth
         });
 
         setInput("");
     };
-
 
     return (
         <div className="chat">
@@ -62,7 +69,7 @@ function Chat({user, chatId, chatName}) {
             <div className="chat__messages">
                 <FlipMove>
                     {messages.map(({ user, _id, message, timestamp }) => (
-                        <Message key={_id} id={_id} sender={user} message={message} timestamp={timestamp} />
+                        <Message key={_id} id={_id} sender={user} message={message} timestamp={timestamp} auth={auth} />
                     ))}
                 </FlipMove>
             </div>
@@ -77,7 +84,6 @@ function Chat({user, chatId, chatName}) {
                     />
                     <button onClick={sendMessage}>Send Message</button>
                 </form>
-                <button onClick={getConversation}>get convo</button>
                 <IconButton>
                     <MicNoneIcon className="chat__mic"/>
                 </IconButton>

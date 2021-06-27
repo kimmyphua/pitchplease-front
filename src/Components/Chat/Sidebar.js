@@ -11,9 +11,9 @@ const pusher = new Pusher('aaca110194e03e7b0484', {
     cluster: 'ap1'
 });
 
-function Sidebar({user, auth}) {
+function Sidebar({user, auth , setChat, chat}) {
     const [chats, setChats] = useState([]);
-
+    console.log(auth)
     // useEffect(() => {
     //     pusher.unsubscribe('messages')
     //
@@ -95,28 +95,28 @@ function Sidebar({user, auth}) {
         });
     }, []);
 
-    // const addChat = (e) => {
-    //     e.preventDefault()
-    //
-    //     const chatName = prompt('Please enter a chat name')
-    //     const firstMsg = prompt('Please enter a welcome message')
-    //
-    //     if (chatName && firstMsg) {
-    //         let chatId = ''
-    //
-    //         axios.post('/apichat/new/conversation', {
-    //             chatName: chatName
-    //         }).then((res) => {
-    //             chatId = res.data._id
-    //         }).then(() => {
-    //             axios.get(`/api/chat/new/message?id=${chatId}`, {
-    //                 message: firstMsg,
-    //                 timestamp: Date.now(),
-    //                 user: user
-    //             })
-    //         })
-    //     }
-    // }
+    const addChat = (e) => {
+        e.preventDefault()
+
+        const chatName = prompt('Please enter a chat name')
+        const firstMsg = prompt('Please enter a welcome message')
+
+        if (chatName && firstMsg) {
+            let chatId = ''
+
+            axios.post('/apichat/new/conversation', {
+                chatName: chatName
+            }).then((res) => {
+                chatId = res.data._id
+            }).then(() => {
+                axios.get(`/api/chat/new/message?id=${chatId}`, {
+                    message: firstMsg,
+                    timestamp: Date.now(),
+                    user: user
+                })
+            })
+        }
+    }
 
     return (
         <div className="sidebar">
@@ -140,7 +140,7 @@ function Sidebar({user, auth}) {
 
             <div className="sidebar__chats">
                 {chats.map(({ id, name, timestamp }) => (
-                    <SidebarChat key={id} id={id} chatName={name} timestamp={timestamp}/>
+                    <SidebarChat key={id} id={id} chatName={name} timestamp={timestamp} auth={auth} setChat={setChat} chat={chat}/>
                 ))}
             </div>
         </div>

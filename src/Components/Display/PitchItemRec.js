@@ -48,7 +48,7 @@ function PitchItemRec({item, setPitch, user, setShowFav}) {
 
 
     async function getPitch() {
-      
+
         let {data} = await axios.get(`/api/pitch`)
         setPitch(data.pitches.reverse())
 
@@ -60,36 +60,41 @@ function PitchItemRec({item, setPitch, user, setShowFav}) {
         console.log("item", item)
     }
 
+    async function createChat(e) {
+        e.preventDefault()
+        const chatName = item.title
+        const firstMsg = prompt('Please enter a welcome message')
+        if (chatName && firstMsg) {
+            let chatId = ''
+            let recId = ''
+            let jsId = ''
+            await axios.get(`/api/user/${user._id}`)
+                .then((res)=>{
+                    recId = res.data.user._id
+                    jsId = item.creator
+                    console.log(recId)
+                    console.log(jsId)
+                })
+            await axios.post('/api/chat/new/conversation', {
+                chatName: chatName
+            }).then((res) => {
+                chatId = res.data._id
+            }).then(() => {
+                 axios.post(`/api/chat/first/message?id=${chatId}&recId=${recId}&jsId=${jsId}`, {
+                    message: firstMsg,
+                    timestamp: Date.now(),
+                    user: user
+                }).catch(e => {
+                     console.log(e);
+                 });
+            })
+            alert("Message Sent!");
+        }
+    }
+
+
     async function postComment(e) {
         e.preventDefault()
-
-//         const chatName = item.title
-//         const firstMsg = prompt('Please enter a welcome message')
-//         if (chatName && firstMsg) {
-//             let chatId = ''
-//             let recId = ''
-//             let jsId = ''
-//             await axios.get(`/apiuser/${user._id}`)
-//                 .then((res)=>{
-//                     recId = res.data.user._id
-//                     jsId = item.creator
-//                     console.log(recId)
-//                     console.log(jsId)
-//                 })
-//             await axios.post('/apichat/new/conversation', {
-//                 chatName: chatName
-//             }).then((res) => {
-//                 chatId = res.data._id
-//             }).then(() => {
-//                 axios.post(`/api/chat/first/message?id=${chatId}&recId=${recId}&jsId=${jsId}`, {
-//                     message: firstMsg,
-//                     timestamp: Date.now(),
-//                     user: user
-//                 })
-//                 console.log(user)
-//                 alert("Message Sent")
-//             })
-
         try{
             await axios.put(`/api/pitch/editcomment/${item._id}`, comment);
             setShowComment(false)
@@ -169,6 +174,7 @@ function PitchItemRec({item, setPitch, user, setShowFav}) {
 
                                     <Form ref={form} id="form" onSubmit={submitFav} method="post">
                                     <button type="submit" className="btn bg-transparent"><img src="https://img.icons8.com/offices/30/000000/filled-like.png"/> </button>
+                                        <button onClick={createChat} className="btn bg-transparent"> Chat </button>
                                     </Form>
                                 </Col>
 
